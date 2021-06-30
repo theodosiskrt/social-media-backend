@@ -1,0 +1,42 @@
+ 
+        ROUTES
+
+        USER
+METHOD     ROUTE             EXPECTED OUTCOME                                                                               NEEDED INPUTS
+
+GET    -   /users            Checks if you are logged in, returns user if you are.
+POST   -   /users/register   Registers a new user, returns the new user if the registration was successful.                 {username, password} needed in x-www-form-urlencoded
+POST   -   /users/login      Logs you in, returns the user that you logged in as. Redirects to /posts if the login failed.  {username, password} needed in x-www-form-urlencoded
+GET    -   /users/logout     Logs out.
+DELETE -   /users            Deletes the currently logged in user.
+
+        FRIENDS
+
+METHOD     ROUTE                         EXPECTED OUTCOME                                                 NEEDED INPUTS
+
+GET    -   /friends                      Returns every friend you have.
+GET    -   /friends/requests             Returns every friend request you have recieved.
+POST   -   /friends:id                   Sends friend request, returns new friend request object.         :id, the id of the user which the request is going to be sent to.
+POST   -   /friends/requests/:id/accept  Accepts request, returns the user that sent the invite.          :id, the id of the request that is going to be accepted.
+POST   -   /friends/requests/:id/decline Declines request.                                                :id, the id of the request that is going to be declined.
+DELETE -   /friends/:id                  Deletes friend.                                                  :id, the id of the friend that is going to be deleted.
+
+        POSTS
+
+METHOD     ROUTE              EXPECTED OUTCOME                                                    NEEDED INPUTS
+
+GET    -   /posts             Returns every post in chronological order.
+GET    -   /posts/friends     Returns every post created by friends in chronological order.
+POST   -   /posts/new         Creates post, returns new post if its creation was successful.      {text} needed in x-www-form-urlencoded
+PATCH  -   /posts/:id/edit    Edits post, returns edited post if the edit was successful.         {text} needed in x-www-form-urlencoded, :id, the id of the post that will be edited.
+DELETE -   /posts/:id         Deletes post.                                                       :id, the id of the post that will be deleted.
+
+        REPLIES
+
+METHOD     ROUTES                  EXPECTED OUTCOME                                                      NEEDED INPUTS
+
+GET    -   /posts/:id/replies      Returns a post object containing its replies.                         :id, the id of the post that will be returned.
+POST   -   /posts/:id/replies/new  Creates new reply to a certain post, returns the post.                {text} needed in x-www-form-urlencoded, :id, the id of the post that the reply will be added to.
+POST   -   /posts/replies/:id/new  Creates new reply to a certain reply, returns parent reply.           {text} needed in x-www-form-urlencoded, :id, the id of the reply that the new reply will be added to.
+PATCH  -   /posts/replies/:id/edit Edits reply, returns edited reply if the edit was successful.         {text} needed in x-www-form-urlencoded, :id, the id of the reply that will be edited.
+DELETE -   /posts/replies/:id      Deletes a reply.                                                      :id, the id of the reply that will be deleted.
