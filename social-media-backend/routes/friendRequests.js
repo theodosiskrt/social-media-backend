@@ -8,7 +8,7 @@ const router = express.Router();
 //Returns every friend you have.
 router.get('/', isLoggedIn, async (req, res) => {
     const currUser = await user.findById(req.user._id).populate('friends');
-    res.send(currUser.friends);
+    res.render('user/friends/friends', {friends:currUser.friends});
 })
 
 //Returns every friend request you have recieved.
@@ -27,7 +27,7 @@ router.get('/requests', isLoggedIn, async (req, res) => {
             model:'User'
         }
     })
-    res.send(currUser.friendRequests);
+    res.render('user/friends/requests', {requests: currUser.friendRequests});
 })
 
 //Accepts request, returns the user that sent the invite.
@@ -64,9 +64,9 @@ router.post('/requests/:id/decline', isLoggedIn, async(req, res) => {
 })
 
 //Sends request, returns new friend request object.
-router.post('/:id', isLoggedIn, async (req, res) => {
+router.post('/new', isLoggedIn, async (req, res) => {
     try{
-        const {id} = req.params;
+        const {id} = req.body;
         const toUser = await user.findById(id);
         const newFriendRequest = new friendRequest({from: req.user, to: toUser})
         toUser.friendRequests = [...toUser.friendRequests, newFriendRequest];
@@ -78,6 +78,9 @@ router.post('/:id', isLoggedIn, async (req, res) => {
         res.send('Error, couldn\'t send request');
     }
 
+})
+router.get('/new', (req, res) => {
+    res.render('user/friends/newFriend');
 })
 
 //Deletes friend.
@@ -92,12 +95,9 @@ router.delete('/:id', async(req, res) => {
         await friendToDelete.save();
         res.send('Friend deleted.');
     }
-    catch{
+    catch {
         res.send('Error, couldn\'t delete friend.')
     }
-
-
-
 })
 
 module.exports = router;

@@ -9,17 +9,17 @@ const addReply = require('../utilities/addReply');
 
 const router = express.Router();
 
-//Returns a post object containing its replies.
-router.get('/:id/replies',async (req, res) => {
+
+
+router.get('/replies/:id', async (req, res) => {
     try{
         const {id} = req.params;
-        const fPost = await post.findById(id).populate('replies');
-        res.send(fPost);
+        const fReply = await reply.findById(id).populate('replies');
+        res.render('posts/replies/parentReplies', {parent:fReply});
     }
     catch{
         res.send('Error, couldn\'t get post.')
     }
-
 })
 
 //Creates new reply to a certain post, return the post (which contains the new reply).
@@ -57,6 +57,9 @@ router.patch('/replies/:id/edit', isLoggedIn, isAuthorized(reply),  async(req, r
     catch{
         res.send("Error, couldn't edit Reply.")
     }
+})
+router.get('/replies/:id/edit', (req, res) => {
+
 })
 
 //Deletes a reply.

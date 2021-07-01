@@ -1,0 +1,22 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Friend Requests</title>
+</head>
+<body>
+    <%let i = 1;%>
+    <%for(let request of requests){%>
+        <p>REQUEST NUMBER <%=i++%>: <%=request%></p>
+    <form action="/user/friends/requests/<%=request._id%>/accept" method="POST">
+        <button>Accept</button>
+    </form>
+    <form action="/user/friends/requests/<%=request._id%>/decline" method="POST">
+        <button>Decline</button>
+    </form>
+    <%}%>
+</body>
+</html>

@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <p>PARENT: <%=parent%></p>
+    <%let  i = 1%>
+    <%for(let reply of parent.replies){%>
+        <p>
+            REPLY NUMBER <%=i++%>: <%=reply%>
+            <form action="/posts/replies/<%=reply._id%>?_method=DELETE" method="POST">
+                <button>Delete Reply</button>
+            </form>
+            <form action="/posts/replies/<%=reply._id%>/edit" method="GET">
+                <button>Edit Reply</button>
+            </form>
+            <form action="/posts/replies/<%=reply._id%>/new" method="POST">
+                <label for="text">Reply:</label>
+                <input type="text" name="text" id="text">
+                <button>Reply</button>
+            </form>
+        </p>
+    <%}%>
+</body>
+</html>

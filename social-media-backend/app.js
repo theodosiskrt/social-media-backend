@@ -3,6 +3,9 @@ const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const PassportLocal = require('passport-local');
+const path = require('path')
+const methodOverride = require('method-override');
+
 
 
 const app = express();
@@ -18,12 +21,20 @@ mongoose.connect('mongodb://localhost:27017/socialMediaBackend', {useNewUrlParse
     })
 
 
+app.set('view engine', 'ejs');
+
+//Running the server from every folder
+app.set('views', path.join(__dirname, 'views'));
+
 const postRoutes = require('./routes/posts');
-const userRoutes  = require('./routes/users');
+const userRoutes  = require('./routes/user');
 const user = require('./models/user');
 
 
 app.use(express.urlencoded({extended: true}));
+
+//Using Method Override to create Patch requests with forms
+app.use(methodOverride('_method'));
 
 //Session
 const sessionConfig = {
@@ -47,11 +58,12 @@ passport.serializeUser(user.serializeUser());
 passport.deserializeUser(user.deserializeUser());
 
 
+
 //ROUTES
 //Post routes
 app.use('/posts', postRoutes)
 //User routes
-app.use('/users', userRoutes)
+app.use('/user', userRoutes)
 
 
 app.listen(3000, () => {

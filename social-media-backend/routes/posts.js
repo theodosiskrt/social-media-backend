@@ -14,8 +14,10 @@ router.use('/', replyRoutes);
 //Returns every post in chronological order.
 router.get('/', async (req, res) => {
         const posts = await post.find()
-        res.send(posts.sort((a, b) => b.date - a.date));
+        res.render('posts/posts', {posts: posts.sort((a, b) => b.date - a.date)});
 })
+
+
 
 //Returns every post created by friends in chronological order.
 router.get('/friends', isLoggedIn, async (req, res) => {
@@ -29,8 +31,10 @@ router.get('/friends', isLoggedIn, async (req, res) => {
 
     });
     currUser.friends.map((friend) => {posts.push(...friend.posts)});
-    res.send(posts.sort((a, b) => b.date - a.date));
+    res.render('posts/posts', {posts: posts.sort((a, b) => b.date - a.date)});
 })
+
+
 
 //Creates post, returns new post if its creation was successful.
 router.post('/new', isLoggedIn, async (req, res) => {
@@ -50,6 +54,9 @@ router.post('/new', isLoggedIn, async (req, res) => {
     }
 
 })
+router.get('/new', (req, res) => {
+    res.render('posts/newPost');
+})
 
 //Edits post, returns edited post if the edit was successful.
 router.patch('/:id/edit', isLoggedIn, isAuthorized(post), async(req, res) => {
@@ -62,6 +69,23 @@ router.patch('/:id/edit', isLoggedIn, isAuthorized(post), async(req, res) => {
         res.send("Error, couldn't edit post.")
     }
 })
+router.get('/:id/edit', (req, res) => {
+    const {id} = req.params
+    res.render('posts/edit', {id});
+})
+
+//Returns a post object containing its replies.
+router.get('/:id',async (req, res) => {
+    try{
+        const {id} = req.params;
+        const fPost = await post.findById(id).populate('replies');
+        res.render('posts/replies/parentReplies', {parent:fPost});
+    }
+    catch{
+        res.send('Error, couldn\'t get post.')
+    }
+
+})
 
 //Deletes post.
 router.delete('/:id', isLoggedIn, isAuthorized(post), deleteRepliesOfParent(post), async (req, res) => {
@@ -73,9 +97,6 @@ router.delete('/:id', isLoggedIn, isAuthorized(post), deleteRepliesOfParent(post
     catch{
         res.send("Error, couldn't delete post")
     }
-
-
-
 })
 
 module.exports = router;

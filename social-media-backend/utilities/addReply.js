@@ -9,7 +9,7 @@ module.exports = async (model, req) => {
     const parent = await model.findById(id);
     const newReply = new reply(req.body);
     parent.replies.push(newReply);
-    newReply.refModel = 'Post';
+    newReply.refModel = model.modelName;
     newReply.parent = parent;
     newReply.author = req.user;
     newReply.authorUsername = req.user.username;
