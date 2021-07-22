@@ -69,7 +69,7 @@ router.patch('/:id/edit', isLoggedIn, isAuthorized(post), async(req, res) => {
         res.send("Error, couldn't edit post.")
     }
 })
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit', isLoggedIn, isAuthorized(post), (req, res) => {
     const {id} = req.params
     res.render('posts/edit', {id});
 })

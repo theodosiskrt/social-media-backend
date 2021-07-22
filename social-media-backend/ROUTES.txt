@@ -16,7 +16,7 @@ ROUTE                         EXPECTED OUTCOME
 
 /user/friends                 Returns every friend you have.
 /user/friends/requests        Returns every friend request you have recieved as well as accept and decline buttons.
-/user/friends/new             Renders new friend form.
+/user/friends/new             Renders new friend form, returns friend request model if the submission succeeded.
 
         POSTS
 
